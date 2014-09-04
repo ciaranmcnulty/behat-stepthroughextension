@@ -1,0 +1,1 @@
+An extension to allow stelling through Behat scenarios
