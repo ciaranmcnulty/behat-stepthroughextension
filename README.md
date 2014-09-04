@@ -2,6 +2,19 @@ Behat-StepThroughExtension helps you debug Behat scenarios by stopping execution
 
 This allows you to do things like observe DB state, inspect browser state, etc. while still being able to resume scenario execution (and post-scenario cleanup)
 
+Installation
+------------
+
+Install by adding to your `composer.json`:
+
+```json
+{
+     "require-dev": {
+         "ciaranmcnulty/behat-stepthroughextension" : "dev-master"
+     }
+ }
+```
+
 Configuration
 -------------
 
