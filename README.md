@@ -42,6 +42,6 @@ To Do
 
 PRs welcome!
 
-[ ] Test coverage using Behat
-[ ] Handle Backgrounds better
-[ ] Don't pause after skipped steps
+- [ ] Test coverage using Behat
+- [ ] Handle Backgrounds better
+- [ ] Don't pause after skipped steps
