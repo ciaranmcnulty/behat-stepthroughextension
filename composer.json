@@ -1,9 +1,25 @@
 {
+    "name": "ciaranmcnulty/behat-stepthroughextension",
+    "type": "library",
+    "description": "Extension for behat to help debug failing scenarios",
+    "keywords": ["tdd","bdd","behat"],
+    "homepage": "http://github.com/ciaranmcnulty/behat-stepthroughextension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ciaran McNulty",
+            "email": "mail@ciaranmcnulty.com",
+            "homepage": "http://ciaranmcnulty.com",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "behat/behat" : "~3.0"
     },
     "require-dev": {
-        "phpspec/phpspec" : "~2.0"
+        "phpspec/phpspec" : "dev-master",
+        "symfony/process" : "~2.3",
+        "symfony/filesystem" : "~2.3"
     },
     "config": {
         "bin-dir": "bin"
