@@ -36,3 +36,12 @@ bin/behat --step-through features/my-failing-feature
 ```
 
 After each step you will see the message `[Paused: press enter to continue]`. Until you do this the suite execution is paused
+
+To Do
+-----
+
+PRs welcome!
+
+[ ] Test coverage using Behat
+[ ] Handle Backgrounds better
+[ ] Don't pause after skipped steps
