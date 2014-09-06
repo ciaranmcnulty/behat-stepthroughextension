@@ -16,7 +16,7 @@ class FeatureContext implements SnippetAcceptingContext
     private $filesystem;
     private $process;
     private $workingDirectory;
-    const OUTPUT_TIMEOUT = 5;
+    const OUTPUT_TIMEOUT = 30;
 
     /**
      * Initializes context.
@@ -161,21 +161,23 @@ class FeatureContext implements SnippetAcceptingContext
     /**
      * @todo test on other platforms
      */
-    private function getPtyPrefix()
+    private function wrapWithPty($command)
     {
-        if (Process::isPtySupported()) {
-            return '';
-        }
-
         if (`which script`) {
-            return 'script -q /dev/null';
+            $usage = `script --help 2>&1`;
+
+            // bsd style
+            if (preg_match('/file.*command/', $usage)) {
+                return sprintf('script -q /dev/null %s', $command);
+            }
         }
 
-        throw new \RuntimeException('Can not execute child process as PTY');
+        throw new \RuntimeException('Can not execute child process as PTY on this platform');
     }
 
     /**
-     * @param $option
+     * @param string $option
+     * @param string $input
      */
     private function runBehat($option, $input='')
     {
@@ -183,13 +185,12 @@ class FeatureContext implements SnippetAcceptingContext
         $phpBin = $phpFinder->find();
 
         $this->process->setWorkingDirectory($this->workingDirectory);
-        $this->process->setCommandLine(sprintf(
-            '%s %s %s %s --no-colors',
-            $this->getPtyPrefix(),
+        $this->process->setCommandLine($this->wrapWithPty(sprintf(
+            '%s %s %s --no-colors',
             $phpBin,
             escapeshellarg(BEHAT_BIN_PATH),
             $option
-        ));
+        )).' 2>&1');
         $this->process->setInput($input);
         $this->process->setPty(true);
 
