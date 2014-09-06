@@ -33,7 +33,12 @@ final class CliPauser implements Pauser
             return;
         }
 
-        $this->output->writeln('  {+tag}[Paused: press enter to continue]{-tag}');
+        if ($this->output->isOutputDecorated()) {
+            $this->output->writeln('  {+tag}[Paused: press enter to continue]{-tag}');
+        }
+        else {
+            $this->output->writeln('  [Paused: press enter to continue]');
+        }
         fgets($this->inputStream, 1024);
     }
 
