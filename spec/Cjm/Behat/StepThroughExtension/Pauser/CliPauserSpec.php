@@ -28,7 +28,7 @@ class CliPauserSpec extends ObjectBehavior
     {
         $this->pause('step name');
 
-        $output->writeln(Argument::cetera())->shouldNotHaveBeenCalled();
+        $output->write(Argument::cetera())->shouldNotHaveBeenCalled();
     }
 
     function it_shows_message_when_pause_is_called(OutputPrinter $output)
@@ -39,6 +39,6 @@ class CliPauserSpec extends ObjectBehavior
         $this->activate();
         $this->pause('step name');
 
-        $output->writeln(Argument::containingString('step name'))->shouldHaveBeenCalled();
+        $output->write(Argument::containingString('step name'))->shouldHaveBeenCalled();
     }
 }

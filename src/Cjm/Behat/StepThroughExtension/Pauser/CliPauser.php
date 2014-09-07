@@ -33,7 +33,7 @@ final class CliPauser implements Pauser
             return;
         }
 
-        $this->output->writeln(sprintf('  [Paused after "%s" - press enter to continue]', $stepText));
+        $this->output->write(sprintf('  [Paused after "%s" - press enter to continue]', $stepText));
 
         fgets($this->inputStream, 1024);
     }
