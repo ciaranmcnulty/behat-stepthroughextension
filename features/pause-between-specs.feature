@@ -59,7 +59,7 @@ Feature: Pausing after specs
 
         Scenario:                   # features/feature.feature:3
           Given I have a step       # FeatureContext::passingStep()
-        [Paused: press enter to continue]
+        [Paused after "I have a step" - press enter to continue]
       """
     And The process should not have ended
 
@@ -72,10 +72,10 @@ Feature: Pausing after specs
 
         Scenario:                           # features/feature.feature:3
           Given I have a step               # FeatureContext::passingStep()
-        [Paused: press enter to continue]
+        [Paused after "I have a step" - press enter to continue]
           When I have a failing step        # FeatureContext::failingStep()
             Error (Exception)
-        [Paused: press enter to continue]
+        [Paused after "I have a failing step" - press enter to continue]
       """
     And The process should not have ended
 
@@ -88,10 +88,10 @@ Feature: Pausing after specs
 
         Scenario:                           # features/feature.feature:3
           Given I have a step               # FeatureContext::passingStep()
-        [Paused: press enter to continue]
+        [Paused after "I have a step" - press enter to continue]
           When I have a failing step        # FeatureContext::failingStep()
             Error (Exception)
-        [Paused: press enter to continue]
+        [Paused after "I have a failing step" - press enter to continue]
           Then I should have a skipped step # FeatureContext::skippedStep()
 
       --- Failed scenarios:

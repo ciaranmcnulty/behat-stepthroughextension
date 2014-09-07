@@ -26,7 +26,7 @@ class CliPauserSpec extends ObjectBehavior
 
     function it_does_not_show_a_message_if_it_has_not_been_activated(OutputPrinter $output)
     {
-        $this->pause();
+        $this->pause('step name');
 
         $output->writeln(Argument::cetera())->shouldNotHaveBeenCalled();
     }
@@ -37,8 +37,8 @@ class CliPauserSpec extends ObjectBehavior
         rewind($this->inputStream);
 
         $this->activate();
-        $this->pause();
+        $this->pause('step name');
 
-        $output->writeln(Argument::type('string'))->shouldHaveBeenCalled();
+        $output->writeln(Argument::containingString('step name'))->shouldHaveBeenCalled();
     }
 }

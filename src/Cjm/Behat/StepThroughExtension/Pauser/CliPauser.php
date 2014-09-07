@@ -27,13 +27,13 @@ final class CliPauser implements Pauser
         $this->inputStream = $inputStream ?: STDIN;
     }
 
-    public function pause()
+    public function pause($stepText)
     {
         if (!$this->isActive) {
             return;
         }
 
-        $this->output->writeln('  [Paused: press enter to continue]');
+        $this->output->writeln(sprintf('  [Paused after "%s" - press enter to continue]', $stepText));
 
         fgets($this->inputStream, 1024);
     }

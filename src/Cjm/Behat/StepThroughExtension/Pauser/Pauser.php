@@ -6,8 +6,10 @@ interface Pauser
 {
     /**
      * Pause (block) until some further action is taken
+     *
+     * @param string $stepText
      */
-    public function pause();
+    public function pause($stepText);
 
     /**
      * Enable the pauser

@@ -35,4 +35,4 @@ When debugging a particular scenario, use the `--step-through` flag at the cli:
 bin/behat --step-through features/my-failing-feature
 ```
 
-After each step you will see the message `[Paused: press enter to continue]`. Until you do this the suite execution is paused
+After each step you will see the message `[Paused after "<step text>" - press enter to continue]`. Until you do this the suite execution is paused
