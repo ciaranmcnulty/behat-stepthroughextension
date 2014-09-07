@@ -16,7 +16,9 @@ class FeatureContext implements SnippetAcceptingContext
     private $filesystem;
     private $process;
     private $workingDirectory;
-    const OUTPUT_TIMEOUT = 30;
+    private $input;
+    private $option;
+    const OUTPUT_TIMEOUT = 5;
 
     /**
      * Initializes context.
@@ -103,24 +105,27 @@ class FeatureContext implements SnippetAcceptingContext
      */
     public function iRunBehatWithTheOption($option)
     {
-        $this->runBehat($option);
+        $this->option = $option;
     }
 
     /**
-     * @When I run behat with the :option option and press enter
+     * @When I press enter
+     * @When I press enter :times times
      */
-    public function iRunBehatWithTheOptionandPressEnter($option)
+    public function iPressEnter($times=1)
     {
-        $this->runBehat($option, "\n");
+        $this->input = str_repeat("\n", (int)$times);
     }
 
     /**
-     * @Then Output should end with:
+     * @Then I should see:
      */
-    public function outputShouldEndWith(PyStringNode $expected)
+    public function iShouldSee(PyStringNode $expected)
     {
+        $this->runBehat();
+
         $start = microtime(true);
-        while (!$this->outputEndsWith($expected->getRaw())) {
+        while (!$this->outputMatches($expected->getRaw())) {
             if (!$this->process->isRunning() || microtime(true)-$start > self::OUTPUT_TIMEOUT) {
                 throw new RuntimeException(
                     sprintf(
@@ -129,23 +134,20 @@ class FeatureContext implements SnippetAcceptingContext
                     )
                 );
             }
+            sleep(1);
         }
     }
 
-    private function outputEndsWith($ending)
+    private function outputMatches($expected)
     {
-        $output = trim(preg_replace('/\\s+/', ' ', $this->process->getOutput()));
-        $ending = trim(preg_replace('/\\s+/', ' ', trim($ending)));
+        $output = $this->normaliseOutput($this->process->getOutput());
+        $expected = $this->normaliseOutput($expected);
 
         if (!$output) {
             return false;
         }
 
-        if (strrpos($output, $ending) != strlen($output)-strlen($ending)) {
-            return false;
-        }
-
-        return true;
+        return $output==$expected;
     }
 
     /**
@@ -155,6 +157,16 @@ class FeatureContext implements SnippetAcceptingContext
     {
         if (!$this->process->isRunning()) {
             throw new RuntimeException('Process unexpectedly stopped');
+        }
+    }
+
+    /**
+     * @Then The process should have ended
+     */
+    public function theProcessShouldHaveEnded()
+    {
+        if ($this->process->isRunning()) {
+            throw new RuntimeException('Process has not stopped');
         }
     }
 
@@ -175,11 +187,7 @@ class FeatureContext implements SnippetAcceptingContext
         throw new \RuntimeException('Can not execute child process as PTY on this platform');
     }
 
-    /**
-     * @param string $option
-     * @param string $input
-     */
-    private function runBehat($option, $input='')
+    private function runBehat()
     {
         $phpFinder = new PhpExecutableFinder();
         $phpBin = $phpFinder->find();
@@ -189,11 +197,20 @@ class FeatureContext implements SnippetAcceptingContext
             '%s %s %s --no-colors',
             $phpBin,
             escapeshellarg(BEHAT_BIN_PATH),
-            $option
+            $this->option
         )).' 2>&1');
-        $this->process->setInput($input);
+        $this->process->setInput($this->input);
         $this->process->setPty(true);
 
         $this->process->start();
+    }
+
+    /**
+     * @param string
+     * @return string
+     */
+    private function normaliseOutput($output)
+    {
+        return trim(preg_replace('/[0-9ms.]+ \([0-9.GkMb]+\)/', 'TIME', preg_replace('/\\s+/', ' ', $output)));
     }
 }

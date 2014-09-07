@@ -2,7 +2,8 @@
 
 namespace Cjm\Behat\StepThroughExtension\Listener;
 
-use Behat\Behat\EventDispatcher\Event\StepTested;
+use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Testwork\Tester\Result\TestResult;
 use Cjm\Behat\StepThroughExtension\Pauser\Pauser;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -28,8 +29,11 @@ final class PausingListener implements EventSubscriberInterface
         );
     }
 
-    public function pauseAfterStep(StepTested $event)
+    public function pauseAfterStep(AfterStepTested $event)
     {
+        if (in_array($event->getTestResult()->getResultCode(), array(TestResult::PENDING, TestResult::SKIPPED))) {
+            return;
+        }
         $this->pauser->pause();
     }
 }
