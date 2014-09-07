@@ -61,7 +61,7 @@ class FeatureContext implements SnippetAcceptingContext
     public function stopProcessIfRunning()
     {
         if ($this->process->isRunning()) {
-            $this->process->stop();
+            $this->process->stop(10);
         }
     }
 
@@ -168,7 +168,7 @@ class FeatureContext implements SnippetAcceptingContext
 
             // bsd style
             if (preg_match('/file.*command/', $usage)) {
-                return sprintf('script -q /dev/null %s', $command);
+                return sprintf('exec script -q /dev/null %s', $command);
             }
         }
 
