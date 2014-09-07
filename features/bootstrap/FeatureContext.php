@@ -134,7 +134,7 @@ class FeatureContext implements SnippetAcceptingContext
                     )
                 );
             }
-            sleep(1);
+            usleep(50);
         }
     }
 
