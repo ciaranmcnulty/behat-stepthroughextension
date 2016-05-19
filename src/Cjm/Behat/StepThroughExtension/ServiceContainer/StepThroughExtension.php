@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
 final class StepThroughExtension implements Extension
 {
     const PAUSER_ID = 'stepthroughextension.pauser';
+    const DEFAULT_BEHAT_OUTPUT_PRINTER_ID = 'cli.output';
 
     /**
      * Returns the extension config key.
@@ -66,9 +67,9 @@ final class StepThroughExtension implements Extension
     {
         $definition = new Definition(
             'Cjm\Behat\StepThroughExtension\Pauser\CliPauser',
-             array(new Definition('Behat\Behat\Output\Printer\ConsoleOutputPrinter'))
+            array(new Reference(self::DEFAULT_BEHAT_OUTPUT_PRINTER_ID))
         );
-        $container->setDefinition(self::PAUSER_ID , $definition);
+        $container->setDefinition(self::PAUSER_ID, $definition);
     }
 
     /**
@@ -89,9 +90,10 @@ final class StepThroughExtension implements Extension
      */
     private function loadListener(ContainerBuilder $container)
     {
-        $definition = new Definition('Cjm\Behat\StepThroughExtension\Listener\PausingListener', array(
-            new Reference(self::PAUSER_ID)
-        ));
+        $definition = new Definition(
+            'Cjm\Behat\StepThroughExtension\Listener\PausingListener',
+            array(new Reference(self::PAUSER_ID))
+        );
         $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG, array('priority' => 0));
         $container->setDefinition(EventDispatcherExtension::SUBSCRIBER_TAG . '.stepthrough.pausing', $definition);
     }

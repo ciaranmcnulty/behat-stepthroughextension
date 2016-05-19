@@ -2,12 +2,12 @@
 
 namespace Cjm\Behat\StepThroughExtension\Pauser;
 
-use Behat\Testwork\Output\Printer\OutputPrinter;
+use Symfony\Component\Console\Output\OutputInterface;
 
 final class CliPauser implements Pauser
 {
     /**
-     * @var OutputPrinter
+     * @var OutputInterface
      */
     private $output;
 
@@ -21,7 +21,7 @@ final class CliPauser implements Pauser
      */
     private $isActive = false;
 
-    public function __construct(OutputPrinter $output, $inputStream = null)
+    public function __construct(OutputInterface $output, $inputStream = null)
     {
         $this->output = $output;
         $this->inputStream = $inputStream ?: STDIN;
