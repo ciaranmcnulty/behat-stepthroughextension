@@ -182,6 +182,11 @@ class FeatureContext implements SnippetAcceptingContext
             if (preg_match('/file.*command/', $usage)) {
                 return sprintf('exec script -q /dev/null %s', $command);
             }
+
+            // linux style
+            if (preg_match('/script [options] [file]/', $usage)) {
+                return sprintf('exec script -c %s /dev/null', escapeshellarg($command));
+            }
         }
 
         throw new \RuntimeException('Can not execute child process as PTY on this platform');
