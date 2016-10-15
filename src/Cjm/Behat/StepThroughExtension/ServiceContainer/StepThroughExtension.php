@@ -81,7 +81,7 @@ final class StepThroughExtension implements Extension
             'Cjm\Behat\StepThroughExtension\Cli\StepThroughController',
             array(new Reference(self::PAUSER_ID))
         );
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
+        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1));
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.stepthrough', $definition);
     }
 
