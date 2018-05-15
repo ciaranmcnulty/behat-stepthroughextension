@@ -9,10 +9,15 @@ interface Pauser
      *
      * @param string $stepText
      */
-    public function pause($stepText);
+    public function pause($stepText, $resultCode);
 
     /**
      * Enable the pauser
      */
     public function activate();
+
+    /**
+     * Enable the pauser
+     */
+    public function activateOnFail();
 } 

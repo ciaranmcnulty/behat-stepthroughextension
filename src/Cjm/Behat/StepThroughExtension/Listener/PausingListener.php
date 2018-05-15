@@ -34,6 +34,6 @@ final class PausingListener implements EventSubscriberInterface
         if (in_array($event->getTestResult()->getResultCode(), array(TestResult::PENDING, TestResult::SKIPPED))) {
             return;
         }
-        $this->pauser->pause($event->getStep()->getText());
+        $this->pauser->pause($event->getStep()->getText(), $event->getTestResult()->getResultCode());
     }
 }

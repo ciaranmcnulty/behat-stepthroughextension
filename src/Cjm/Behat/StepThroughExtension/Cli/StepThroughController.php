@@ -32,6 +32,7 @@ final class StepThroughController implements Controller
     public function configure(SymfonyCommand $command)
     {
         $command->addOption('--step-through', null, InputOption::VALUE_NONE, 'Pause after every step to aid debugging');
+        $command->addOption('--pause-on-fail', null, InputOption::VALUE_NONE, 'Pause after each failed step to aid debugging');
     }
 
     /**
@@ -41,6 +42,10 @@ final class StepThroughController implements Controller
     {
         if ($input->getOption('step-through') && $input->isInteractive()) {
             $this->pauser->activate();
+        }
+
+        if ($input->getOption('pause-on-fail') && $input->isInteractive()) {
+            $this->pauser->activateOnFail();
         }
     }
 }
