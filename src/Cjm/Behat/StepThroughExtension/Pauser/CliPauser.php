@@ -3,6 +3,7 @@
 namespace Cjm\Behat\StepThroughExtension\Pauser;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use Behat\Testwork\Tester\Result\TestResult;
 
 final class CliPauser implements Pauser
 {
@@ -21,15 +22,18 @@ final class CliPauser implements Pauser
      */
     private $isActive = false;
 
+
+    private $isActiveOnFail = false;
+
     public function __construct(OutputInterface $output, $inputStream = null)
     {
         $this->output = $output;
         $this->inputStream = $inputStream ?: STDIN;
     }
 
-    public function pause($stepText)
+    public function pause($stepText, $resultCode)
     {
-        if (!$this->isActive) {
+        if (!$this->isActive && (!$this->isActiveOnFail || $resultCode != TestResult::FAILED)) {
             return;
         }
 
@@ -41,5 +45,10 @@ final class CliPauser implements Pauser
     public function activate()
     {
         $this->isActive = true;
+    }
+
+    public function activateOnFail()
+    {
+        $this->isActiveOnFail = true;
     }
 }
